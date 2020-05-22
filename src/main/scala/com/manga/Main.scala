@@ -9,8 +9,10 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.implicits._
 import cats.implicits._
 import com.manga.manager.LibraryManager
+import com.manga.model.Manga
 import io.circe.syntax._
 import org.http4s.circe.CirceEntityEncoder._
+import org.http4s.circe.CirceEntityDecoder._
 import com.manga.repository.InMemoryRepository
 import io.circe.Printer
 
@@ -35,6 +37,13 @@ object Main extends IOApp {
         Ok(mangas)
       case GET -> Root / "data" =>
         Ok(manager.get.map(_.asJson))
+      case req @ POST -> Root / "add" =>
+        for {
+          // Decode a User request
+          manga <- req.as[Manga]
+          // Encode a hello response
+          resp <- Ok(s"The manga has been added successfully: ${manga.title}")
+        } yield (resp)
     }
 
     val httpApp = Router("/" -> http, "/manga" -> mangaListRoute).orNotFound
