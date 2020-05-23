@@ -1,8 +1,21 @@
+enablePlugins(JavaAppPackaging)
+
 name := "manga-library"
 
 version := "0.1"
 
 scalaVersion := "2.13.2"
+sbtVersion := "1.3.5"
+
+
+maintainer in Docker := "Samehadar <stels95@list.ru>"
+packageSummary in Docker := "A manga library"
+packageDescription := "Docker Service written in Scala"
+dockerExposedPorts := Seq(8080)
+
+// Only add this if you want to rename your docker image name
+//packageName in Docker := "docking-station"
+
 
 
 val Http4sVersion = "0.21.4"
@@ -31,6 +44,7 @@ libraryDependencies += "ch.qos.logback"             %  "logback-classic" % "1.2.
 
 //test containers
 libraryDependencies += "org.scalatest"  %% "scalatest"                        % "3.1.2"                     % "test"
-libraryDependencies += "com.dimafeng"   %  "testcontainers-scala_2.13"        % testcontainersScalaVersion  % "test"
+libraryDependencies += "com.dimafeng"   %% "testcontainers-scala"             % testcontainersScalaVersion  % "test"
 libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-scalatest"   % testcontainersScalaVersion  % "test"
 libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-postgresql"  % testcontainersScalaVersion  % "test"
+
