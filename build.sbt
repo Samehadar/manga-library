@@ -1,9 +1,11 @@
+enablePlugins(JavaAppPackaging)
+
 name := "manga-library"
 
 version := "0.1"
 
 scalaVersion := "2.13.2"
-
+sbtVersion := "1.3.5"
 
 val Http4sVersion = "0.21.4"
 val testcontainersScalaVersion = "0.37.0"
@@ -31,6 +33,6 @@ libraryDependencies += "ch.qos.logback"             %  "logback-classic" % "1.2.
 
 //test containers
 libraryDependencies += "org.scalatest"  %% "scalatest"                        % "3.1.2"                     % "test"
-libraryDependencies += "com.dimafeng"   %  "testcontainers-scala_2.13"        % testcontainersScalaVersion  % "test"
+libraryDependencies += "com.dimafeng"   %% "testcontainers-scala"             % testcontainersScalaVersion  % "test"
 libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-scalatest"   % testcontainersScalaVersion  % "test"
 libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-postgresql"  % testcontainersScalaVersion  % "test"
