@@ -1,5 +1,4 @@
 enablePlugins(JavaAppPackaging)
-//enablePlugins(DockerPlugin)
 
 name := "manga-library"
 
@@ -12,7 +11,7 @@ sbtVersion := "1.3.5"
 maintainer in Docker := "Samehadar <stels95@list.ru>"
 packageSummary in Docker := "A manga library"
 packageDescription := "Docker Service written in Scala"
-dockerExposedPorts := Seq(8080, 80)
+dockerExposedPorts := Seq(8080)
 
 // Only add this if you want to rename your docker image name
 //packageName in Docker := "docking-station"

@@ -51,7 +51,7 @@ object Main extends IOApp {
 
     BlazeServerBuilder[IO](global)
       .withHttpApp(httpApp)
-      .bindHttp(8080, "localhost")
+      .bindHttp(8080, "0.0.0.0")
       .resource
       .use(_ => IO.never)
       .as(ExitCode.Success)
