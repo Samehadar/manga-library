@@ -36,7 +36,8 @@ libraryDependencies ++= Seq(
 )
 
 //db driver
-libraryDependencies += "org.postgresql" % "postgresql" % "42.2.12"
+libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.12"
+libraryDependencies += "org.flywaydb"   % "flyway-core" % "6,4.2"
 
 //logging
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging"   % "3.9.2"
