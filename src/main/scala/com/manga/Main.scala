@@ -2,7 +2,7 @@ package com.manga
 
 import java.sql.DriverManager
 
-import cats.effect.{ExitCode, IO, IOApp}
+import cats.effect.{Blocker, ExitCode, IO, IOApp}
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.implicits._
@@ -19,7 +19,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Main extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
-
     val container = PostgreSQLContainer()
     container.start()
 
@@ -43,14 +42,14 @@ object Main extends IOApp {
 
     val httpApp = Router("manga" -> mangaRoutes).orNotFound
 
-
-    BlazeServerBuilder[IO](global)
-      .withHttpApp(httpApp)
-      .bindHttp(8080, "0.0.0.0")
-      .resource
-      .use(_ => IO.never)
-      .as(ExitCode.Success)
-
-
+    for {
+      config <- Blocker[IO].use(MangaLibraryConfig.load[IO])
+      server <-  BlazeServerBuilder[IO](global)
+        .withHttpApp(httpApp)
+        .bindHttp(config.server.port, config.server.host)
+        .resource
+        .use(_ => IO.never)
+        .as(ExitCode.Success)
+    } yield server
   }
 }
