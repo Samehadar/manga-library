@@ -26,9 +26,11 @@ object Main extends IOApp {
     val connection = DriverManager.getConnection(container.jdbcUrl, container.username, container.password)
     connection.createStatement().executeQuery(container.testQueryString)
 
-    val flyway = new Flyway
-    flyway.setDataSource(container.jdbcUrl, container.username, container.password)
-    flyway.setSchemas("flyway")
+    val flyway = Flyway
+      .configure()
+      .dataSource(container.jdbcUrl, container.username, container.password)
+      .schemas("flyway")
+      .load()
     flyway.migrate()
 
     implicit val printer: Printer = Printer.spaces2.copy(dropNullValues = true)
