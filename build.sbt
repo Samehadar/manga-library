@@ -20,6 +20,7 @@ dockerExposedPorts := Seq(8080)
 
 val Http4sVersion = "0.21.4"
 val testcontainersScalaVersion = "0.37.0"
+val PureConfigVersion = "0.12.3"
 
 //cats
 libraryDependencies += "org.typelevel" %% "cats-effect" % "2.1.3"
@@ -28,6 +29,10 @@ libraryDependencies += "org.typelevel" %% "cats-effect" % "2.1.3"
 libraryDependencies += "org.http4s" %% "http4s-core"          % Http4sVersion
 libraryDependencies += "org.http4s" %% "http4s-dsl"           % Http4sVersion
 libraryDependencies += "org.http4s" %% "http4s-blaze-server"  % Http4sVersion
+
+//pconfig
+libraryDependencies += "com.github.pureconfig" %% "pureconfig"              % PureConfigVersion
+libraryDependencies += "com.github.pureconfig" %% "pureconfig-cats-effect"  % PureConfigVersion
 
 //circe
 libraryDependencies ++= Seq(
