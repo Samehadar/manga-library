@@ -36,7 +36,10 @@ libraryDependencies ++= Seq(
 )
 
 //db driver
-libraryDependencies += "org.postgresql" % "postgresql" % "42.2.12"
+libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.12"
+
+//migrations
+libraryDependencies += "org.flywaydb"   % "flyway-core" % "6.4.2"
 
 //logging
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging"   % "3.9.2"
@@ -44,7 +47,7 @@ libraryDependencies += "ch.qos.logback"             %  "logback-classic" % "1.2.
 
 //test containers
 libraryDependencies += "org.scalatest"  %% "scalatest"                        % "3.1.2"                     % "test"
-libraryDependencies += "com.dimafeng"   %% "testcontainers-scala"             % testcontainersScalaVersion  % "test"
+libraryDependencies += "com.dimafeng"   %% "testcontainers-scala"             % testcontainersScalaVersion  //% "test"
 libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-scalatest"   % testcontainersScalaVersion  % "test"
-libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-postgresql"  % testcontainersScalaVersion  % "test"
+libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-postgresql"  % testcontainersScalaVersion  //% "test"
 
