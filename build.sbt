@@ -44,7 +44,7 @@ libraryDependencies += "ch.qos.logback"             %  "logback-classic" % "1.2.
 
 //test containers
 libraryDependencies += "org.scalatest"  %% "scalatest"                        % "3.1.2"                     % "test"
-libraryDependencies += "com.dimafeng"   %% "testcontainers-scala"             % testcontainersScalaVersion  % "test"
+libraryDependencies += "com.dimafeng"   %% "testcontainers-scala"             % testcontainersScalaVersion  //% "test"
 libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-scalatest"   % testcontainersScalaVersion  % "test"
-libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-postgresql"  % testcontainersScalaVersion  % "test"
+libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-postgresql"  % testcontainersScalaVersion  //% "test"
 

@@ -1,10 +1,13 @@
 package com.manga
 
+import java.sql.DriverManager
+
 import cats.effect.{ExitCode, IO, IOApp}
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.implicits._
 import cats.implicits._
+import com.dimafeng.testcontainers.PostgreSQLContainer
 import com.manga.manager.LibraryManager
 import com.manga.repository.InMemoryRepository
 import com.manga.route.MangaRoutes
@@ -15,6 +18,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Main extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
+
+    val container = PostgreSQLContainer()
+    container.start()
+
+    val connection = DriverManager.getConnection(container.jdbcUrl, container.username, container.password)
+    connection.createStatement().executeQuery(container.testQueryString)
+
 
     implicit val printer: Printer = Printer.spaces2.copy(dropNullValues = true)
     val library = new InMemoryRepository[IO]
