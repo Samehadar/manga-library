@@ -8,16 +8,14 @@ scalaVersion := "2.13.2"
 sbtVersion := "1.3.5"
 
 
+//docker
 maintainer in Docker := "Samehadar <stels95@list.ru>"
 packageSummary in Docker := "A manga library"
 packageDescription := "Docker Service written in Scala"
 dockerExposedPorts := Seq(8080)
 
-// Only add this if you want to rename your docker image name
-//packageName in Docker := "docking-station"
 
-
-
+val doobieVersion = "0.8.8"
 val Http4sVersion = "0.21.4"
 val testcontainersScalaVersion = "0.37.0"
 val PureConfigVersion = "0.12.3"
@@ -40,11 +38,17 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % "0.12.2",
 )
 
-//db driver
-libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.12"
 
 //migrations
 libraryDependencies += "org.flywaydb"   % "flyway-core" % "6.4.2"
+
+//doobie
+libraryDependencies ++= Seq(
+  "org.tpolecat" %% "doobie-core"     % doobieVersion,
+  "org.tpolecat" %% "doobie-hikari"   % doobieVersion,
+  "org.tpolecat" %% "doobie-postgres" % doobieVersion,
+  "org.tpolecat" %% "doobie-specs2"   % doobieVersion % "test"
+)
 
 //logging
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging"   % "3.9.2"

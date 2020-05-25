@@ -9,7 +9,6 @@ import org.http4s.dsl.io._
 import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.circe.CirceEntityDecoder._
 import io.circe.syntax._
-import org.http4s.dsl.Http4sDsl
 
 class MangaRoutes[F[_] : Sync](manager: LibraryManager[F]) extends Route[F] {
 
