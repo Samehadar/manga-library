@@ -7,7 +7,7 @@ import org.http4s.implicits._
 import cats.implicits._
 import com.manga.db.Database
 import com.manga.repository.MangaRepository
-import com.manga.service.MangaService
+import com.manga.service.{MangaService, TimeService}
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import org.http4s.HttpRoutes
@@ -41,7 +41,7 @@ object Main extends IOApp {
       transactor  <- Database.transactor[F](container, ec, blocker)
       _           <- Resource.liftF(Database.initFlyway[F](transactor))
       repo        =  MangaRepository.fromTransactor[F](transactor)
-      httpApp     =  Router("manga" -> new MangaService[F](repo).routes)
+      httpApp     =  Router("manga" -> new MangaService[F](repo).routes, "/" -> new TimeService[F].routes)
       server      <- server[F](config.server, httpApp)
     } yield Resources[F](server, transactor, config)
   }

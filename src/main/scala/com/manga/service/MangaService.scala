@@ -5,18 +5,12 @@ import cats.implicits._
 import com.manga.model.{Manga, MangaNotFoundError}
 import com.manga.repository.MangaRepository
 import fs2.Stream
-import io.circe.Printer
 import io.circe.generic.auto._
 import io.circe.syntax._
 import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.circe.CirceEntityDecoder._
-import org.http4s.dsl.Http4sDsl
 import org.http4s.headers.{Location, `Content-Type`}
 import org.http4s.{HttpRoutes, MediaType, Uri}
-
-trait Service[F[_]] extends Http4sDsl[F] {
-  def routes: HttpRoutes[F]
-}
 
 class MangaService[F[_] : Sync](repository: MangaRepository[F]) extends Service[F] {
 

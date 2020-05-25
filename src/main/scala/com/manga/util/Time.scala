@@ -1,17 +1,17 @@
 package com.manga.util
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 import cats.effect.Sync
 
 trait Time[F[_]] {
-  def localDate: F[LocalDate]
+  def localDateTime: F[LocalDateTime]
 }
 
 object Time {
   def apply[F[_] : Time]: Time[F] = implicitly[Time[F]]
 
   implicit def syncTime[F[_] : Sync]: Time[F] = new Time[F] {
-    override def localDate: F[LocalDate] = Sync[F].delay(LocalDate.now())
+    override def localDateTime: F[LocalDateTime] = Sync[F].delay(LocalDateTime.now())
   }
 }
