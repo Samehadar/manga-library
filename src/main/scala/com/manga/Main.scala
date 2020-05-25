@@ -6,8 +6,8 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.implicits._
 import cats.implicits._
 import com.manga.db.Database
-import com.manga.manager.LibraryManager
-import com.manga.route.MangaRoutes
+import com.manga.repository.MangaRepository
+import com.manga.service.MangaService
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import org.http4s.HttpRoutes
@@ -40,8 +40,8 @@ object Main extends IOApp {
       ec          <- ExecutionContexts.fixedThreadPool[F](config.database.threadPoolSize)
       transactor  <- Database.transactor[F](container, ec, blocker)
       _           <- Resource.liftF(Database.initFlyway[F](transactor))
-      manager     =  new LibraryManager[F] //todo:: put transactor into
-      httpApp     =  Router("manga" -> new MangaRoutes[F](manager).routes)
+      repo        =  MangaRepository.fromTransactor[F](transactor)
+      httpApp     =  Router("manga" -> new MangaService[F](repo).routes)
       server      <- server[F](config.server, httpApp)
     } yield Resources[F](server, transactor, config)
   }
