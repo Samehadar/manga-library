@@ -5,8 +5,9 @@ import pureconfig._
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax._
 
-case class MangaLibraryConfig(server: ServerConfig)
+case class MangaLibraryConfig(server: ServerConfig, database: DatabaseConfig)
 case class ServerConfig(host: String, port: Int)
+case class DatabaseConfig(threadPoolSize: Int)
 
 object MangaLibraryConfig {
   def load[F[_] : Sync : ContextShift](blocker: Blocker): F[MangaLibraryConfig] = {
