@@ -36,7 +36,7 @@ object Main extends IOApp {
     for {
       blocker     <- Blocker[F]
       config      <- Resource.liftF(MangaLibraryConfig.load[F](blocker))
-      container   <- Database.container[F]
+      container   <- Database.container[F](config.database)
       ec          <- ExecutionContexts.fixedThreadPool[F](config.database.threadPoolSize)
       transactor  <- Database.transactor[F](container, ec, blocker)
       _           <- Resource.liftF(Database.initFlyway[F](transactor))

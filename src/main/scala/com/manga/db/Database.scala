@@ -1,7 +1,7 @@
 package com.manga.db
 
 import cats.effect.{Async, Blocker, ContextShift, Resource, Sync}
-import com.dimafeng.testcontainers.PostgreSQLContainer
+import com.manga.DatabaseConfig
 import doobie.hikari.HikariTransactor
 import org.flywaydb.core.Flyway
 
@@ -10,9 +10,10 @@ import scala.concurrent.ExecutionContext
 object Database {
 
 
-  def container[F[_] : Sync]: Resource[F, PostgreSQLContainer] = Resource.liftF(
+  def container[F[_] : Sync](config: DatabaseConfig): Resource[F, FixedPostgreSQLContainer] = Resource.liftF(
     Sync[F].delay {
-      val container = PostgreSQLContainer()
+      val container: FixedPostgreSQLContainer = new FixedPostgreSQLContainer()
+      container.configurePort(config.port)
       container.start()
       container
     }
@@ -20,15 +21,15 @@ object Database {
 
   // Construct a transactor for connecting to the database.
   def transactor[F[_]: Async: ContextShift](
-                                             container: PostgreSQLContainer,
+                                             container: FixedPostgreSQLContainer,
                                              ec: ExecutionContext,
                                              blocker: Blocker
                                            ): Resource[F, HikariTransactor[F]] =
   HikariTransactor.newHikariTransactor(
-    container.driverClassName,
-    container.jdbcUrl,
-    container.username,
-    container.password,
+    container.getDriverClassName,
+    container.getJdbcUrl,
+    container.getUsername,
+    container.getPassword,
     ec,
     blocker
   )
