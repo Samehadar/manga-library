@@ -1,16 +1,18 @@
 package com.manga.service
 
-import cats.effect.{ConcurrentEffect, Sync}
+import cats.effect.Sync
+import cats.implicits._
 import com.manga.model.{Manga, MangaNotFoundError}
 import com.manga.repository.MangaRepository
-import io.circe.{Json, Printer}
-import org.http4s.{HttpRoutes, Response, Status}
-import org.http4s.dsl.io._
+import fs2.Stream
+import io.circe.Printer
+import io.circe.generic.auto._
+import io.circe.syntax._
 import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.circe.CirceEntityDecoder._
-import io.circe.syntax._
 import org.http4s.dsl.Http4sDsl
-import cats.implicits._
+import org.http4s.headers.{Location, `Content-Type`}
+import org.http4s.{HttpRoutes, MediaType, Uri}
 
 trait Service[F[_]] extends Http4sDsl[F] {
   def routes: HttpRoutes[F]
@@ -20,15 +22,17 @@ class MangaService[F[_] : Sync](repository: MangaRepository[F]) extends Service[
 
   override def routes: HttpRoutes[F] = {
     HttpRoutes.of[F] {
-//      case GET -> Root / "list" =>
-//        Monad[F].pure(Response(Status.Ok))
-//        Ok(Monad[F].map(repository.get)(x => x.asJson: Json))
+      case GET -> Root / "list" =>
+        //todo:: do it more pretty, now I am too sleepy
+        Ok(Stream("[".asJson) ++ repository.get.map(_.asJson) ++ Stream("]".asJson), `Content-Type`(MediaType.application.json))
 
-//      case req @ POST -> Root / "add" =>
-//        Monad[F].flatMap(req.as[Manga]){manga =>
-//          manager.add(manga)
-//          Ok(s"The manga has been added successfully: ${manga.title}")
-//        }
+      case req @ POST -> Root / "add" =>
+        for {
+          manga <- req.as[Manga]
+          createdManga <- repository.create(manga)
+          response <- Created(createdManga.asJson, Location(Uri.unsafeFromString(s"/manga/${createdManga.id.get}")))
+        } yield response
+
       case GET -> Root / LongVar(id) =>
         repository.get(id).flatMap{
           case Left(MangaNotFoundError) => NotFound()
