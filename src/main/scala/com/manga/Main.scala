@@ -11,6 +11,10 @@ import com.manga.service.{MangaService, TimeService}
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import org.http4s.HttpRoutes
+import sttp.tapir.openapi.OpenAPI
+import sttp.tapir.docs.openapi._
+import sttp.tapir.openapi.circe.yaml._
+import sttp.tapir.swagger.http4s.SwaggerHttp4s
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -22,7 +26,7 @@ object Main extends IOApp {
   }
 
   // Resource that mounts the given `routes` and starts a server.
-  def server[F[_]: ConcurrentEffect: ContextShift: Timer](
+  private def server[F[_]: ConcurrentEffect: ContextShift: Timer](
                                                            config: ServerConfig,
                                                            routes: HttpRoutes[F]
                                                          ): Resource[F, Server[F]] =
@@ -41,9 +45,17 @@ object Main extends IOApp {
       transactor  <- Database.transactor[F](container, ec, blocker)
       _           <- Resource.liftF(Database.initFlyway[F](transactor))
       repo        =  MangaRepository.fromTransactor[F](transactor)
-      httpApp     =  Router("manga" -> new MangaService[F](repo).routes, "/" -> new TimeService[F].routes)
+      mangsS      =  new MangaService[F](repo)
+      httpApp     =  Router("/" -> (mangsS.routes <+> openAPI(mangsS)))//, "/" -> new TimeService[F].routes)
       server      <- server[F](config.server, httpApp)
     } yield Resources[F](server, transactor, config)
+  }
+
+  private def openAPI[F[_] : ContextShift : Sync](mangaService: MangaService[F]): HttpRoutes[F] = {
+    val openApiDocs: OpenAPI = mangaService.endpoints.toOpenAPI("The tapir library", "1.0.0")
+    val openApiYml: String = openApiDocs.toYaml
+
+    new SwaggerHttp4s(openApiYml).routes[F]
   }
 
 }

@@ -60,3 +60,10 @@ libraryDependencies += "com.dimafeng"   %% "testcontainers-scala"             % 
 libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-scalatest"   % testcontainersScalaVersion  % "test"
 libraryDependencies += "com.dimafeng"   %% "testcontainers-scala-postgresql"  % testcontainersScalaVersion  //% "test"
 
+libraryDependencies += "com.softwaremill.sttp.tapir" %% "tapir-core" % "0.15.2"
+libraryDependencies += "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs" % "0.15.2"
+libraryDependencies += "com.softwaremill.sttp.tapir" %% "tapir-openapi-circe-yaml" % "0.15.2"
+libraryDependencies += "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-http4s" % "0.15.3"
+libraryDependencies += "com.softwaremill.sttp.tapir" %% "tapir-redoc-http4s" % "0.15.3"
+libraryDependencies += "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % "0.15.3"
+libraryDependencies += "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % "0.15.3"
